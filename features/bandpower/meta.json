@@ -10,3 +10,4 @@
     {"name": "bandpower_alpha", "unit": "uV^2", "expected_range": [0, 1000000]}
   ]
 }
+
