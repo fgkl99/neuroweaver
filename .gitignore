@@ -1,13 +1,12 @@
+# Python
 __pycache__/
-.env
-*.log
-# Runtime artifacts
-artifacts/run_*/
-runs/run_*/
-
-# Temp files
-C:\Users\Fabri\Documents\neuroweaver\artifacts\run_20260123_190338
-tree
-
-# Pytest
+*.pyc
 .pytest_cache/
+.env
+.venv/
+venv/
+.env.*
+
+# NeuroWeaver outputs
+artifacts/
+runs/
