@@ -1,0 +1,10 @@
+id: CR-0001
+title: Orchestrator MVP smoke run
+intent: Add minimal orchestrator to run tests and produce report.json
+acceptance:
+  - pytest passes
+  - orchestrator creates artifacts/run_*/report.json
+test_commands:
+  - python -m pytest -q
+verify_commands:
+  - python run.py --input data/recording_060s.csv --meta data/recording_001.meta.json
