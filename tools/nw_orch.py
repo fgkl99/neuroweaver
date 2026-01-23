@@ -213,6 +213,7 @@ def main() -> int:
     # Stage 4: feature determinism gate (CR-controlled, fallback to touched)
     det_features = cr.get("determinism_features") or sorted(touched)
     if det_features:
+
         det_out = out_dir / "feature_determinism.json"
         det_cmd = [
             "python", "tools/feature_determinism.py",
@@ -236,6 +237,29 @@ def main() -> int:
             write_report(out_dir, report)
             print(f"[FAIL] feature_determinism -> {out_dir / 'report.json'}")
             return 4
+
+        # Stage 5: golden snapshot gate (uses determinism artifact)
+        golden_cmd = [
+            "python", "tools/feature_golden.py",
+            "--det-report", str(det_out),
+            "--mode", "check",
+        ]
+        r = run_cmd(golden_cmd)
+        results.append(r.__dict__)
+        if r.returncode != 0:
+            report = {
+                "change_request": cr,
+                "status": "FAIL",
+                "stage": "feature_golden",
+                "results": results,
+                "artifacts_dir": str(out_dir),
+                "changed_files": sorted(changed),
+                "touched_features": sorted(touched),
+                "determinism_features": list(det_features),
+            }
+            write_report(out_dir, report)
+            print(f"[FAIL] feature_golden -> {out_dir / 'report.json'}")
+            return 5
 
     report = {
         "change_request": cr,
