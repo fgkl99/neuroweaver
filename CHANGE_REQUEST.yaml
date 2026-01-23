@@ -1,10 +1,11 @@
-id: CR-0001
-title: Orchestrator MVP smoke run
-intent: Add minimal orchestrator to run tests and produce report.json
+id: CR-0002
+title: Orchestrator encapsulates runs output
+intent: Ensure run.py writes inside orchestrator artifacts directory for clean iteration.
 acceptance:
   - pytest passes
-  - orchestrator creates artifacts/run_*/report.json
+  - run.py output is written under artifacts/run_*/nw_runs/
+  - report.json saved under artifacts/run_*/
 test_commands:
-  - python -m pytest -q
+  - [python, -m, pytest, -q]
 verify_commands:
-  - python run.py --input data/recording_060s.csv --meta data/recording_001.meta.json
+  - [python, run.py, --meta, data/recording_001.meta.json, --out-root, "{OUT_DIR}/nw_runs"]
