@@ -1,0 +1,9 @@
+{
+  "schema_version_ok": true,
+  "channels_ok": true,
+  "columns_ok": true,
+  "time_monotonic_ok": true,
+  "fs_consistent_ok": true,
+  "missing_ratio_ok": true,
+  "amplitude_ok": true
+}
