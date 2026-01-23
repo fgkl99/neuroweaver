@@ -1,6 +1,6 @@
 # NeuroWeaver
 
-NeuroWeaver is a decision-oriented pipeline for low-density wearable EEG.
+NeuroWeaver is a decision-oriented pipeline for EEG.
 It audits data quality, plans defensible features, and executes feature extraction
 under strict, reproducible constraints.
 
@@ -21,7 +21,6 @@ It prioritizes justified ML design over raw performance.
 ## Assumed EEG format
 - 8 fixed channels: F3, F4, C3, C4, P3, P4, O1, O2
 - Sampling rate ~128 Hz
-- Wearable-grade signal quality
 - CSV + JSON metadata
 
 ## Why this exists
