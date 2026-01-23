@@ -109,7 +109,7 @@ def enforce_feature_contract(touched_features: Set[str]) -> List[str]:
         meta_id = str(meta.get("id", "")).strip()
         if meta_id != name:
             errors.append(f"meta.id mismatch for feature '{name}': meta.id='{meta_id}' but folder is features/{name}/")
-        
+
         # 3) tests must exist
         if not test_dir.is_dir():
             errors.append(f"Missing test folder for touched feature: tests/features/{name}/")
@@ -117,6 +117,23 @@ def enforce_feature_contract(touched_features: Set[str]) -> List[str]:
             tests = list(test_dir.glob("test_*.py"))
             if len(tests) == 0:
                 errors.append(f"No tests found in: tests/features/{name}/ (expected test_*.py)")
+
+        # 4) feature.py must exist, be importable, and define callable compute
+        feature_py = feat_dir / "feature.py"
+        if not feature_py.is_file():
+            errors.append(f"Missing feature implementation: features/{name}/feature.py")
+        else:
+            try:
+                import importlib.util
+                spec = importlib.util.spec_from_file_location(f"features.{name}.feature", feature_py)
+                if spec is None or spec.loader is None:
+                    raise RuntimeError("Cannot create import spec")
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)  # type: ignore
+                if not hasattr(mod, "compute") or not callable(getattr(mod, "compute")):
+                    errors.append(f"features/{name}/feature.py must define callable compute(df, meta)")
+            except Exception as e:
+                errors.append(f"Failed to import features/{name}/feature.py: {e}")
 
     return errors
 
