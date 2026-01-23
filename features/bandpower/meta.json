@@ -1,0 +1,12 @@
+{
+  "id": "bandpower",
+  "version": "0.1.0",
+  "description": "Bandpower features for EEG8 (placeholder).",
+  "inputs": {
+    "channels": ["F3","F4","C3","C4","P3","P4","O1","O2"],
+    "sampling_rate_hz_min": 100
+  },
+  "outputs": [
+    {"name": "bandpower_alpha", "unit": "uV^2", "expected_range": [0, 1000000]}
+  ]
+}
