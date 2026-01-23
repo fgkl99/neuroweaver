@@ -46,5 +46,41 @@ All EEG recordings included in this repository are synthetic or mock data.
 They are provided solely to demonstrate the pipeline and are not intended
 to represent real physiological measurements.
 
+## Extending the pipeline
+
+NeuroWeaver is designed to be extended incrementally, without breaking its
+decision-oriented philosophy.
+
+### Adding new feature families
+To add a new feature type (e.g. Hjorth parameters, fractal dimension):
+
+1. Extend the feature schema (`schemas/feature_plan_v0.schema.json`)
+   by adding the new feature family enum if needed.
+2. Update the feature planner logic (LLM or deterministic fallback)
+   to propose the new feature only when justified by data quality.
+3. Implement the feature computation in `extract_features.py`,
+   keeping the implementation deterministic and auditable.
+
+New features should:
+- Be explainable in physiological or signal-processing terms
+- Fail gracefully when data is insufficient
+- Avoid introducing hidden model assumptions
+
+### Adding new agents
+New agents (e.g. ModelStrategist, ValidationPlanner) should:
+- Consume structured JSON outputs from previous steps
+- Produce schema-validated JSON outputs
+- Never silently override earlier decisions
+
+Agents are expected to *refine* decisions, not to replace them.
+
+### Supporting new EEG configurations
+This repository intentionally supports a single EEG configuration (8-channel wearable).
+Additional configurations should be introduced as new schemas
+(e.g. `eeg16_v0`, `ear_eeg_v0`) rather than loosening existing constraints.
+
+This preserves reproducibility and prevents scope creep.
+
+
 ## Status
-This is a research/engineering prototype intended for portfolio and experimentation.
+This is a research/engineering prototype intended for experimentation.
