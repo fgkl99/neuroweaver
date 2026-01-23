@@ -8,7 +8,7 @@ This project is intentionally conservative.
 It prioritizes justified ML design over raw performance.
 
 ## What it does
-- Validates EEG inputs against a fixed 8-channel wearable schema
+- Validates EEG inputs against a fixed 8-channel schema
 - Audits data quality using a strict LLM-based reviewer
 - Plans feature extraction with guardrails and deterministic fallbacks
 - Executes real feature extraction (RMS, bandpower, spectral entropy)
