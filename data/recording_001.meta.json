@@ -1,0 +1,28 @@
+{
+  "schema_version": "eeg8_v0",
+  "recording_id": "rec_001",
+  "subject_id": "S01",
+  "session_id": "001",
+  "sampling_rate_hz": 128,
+  "channels": ["F3","F4","C3","C4","P3","P4","O1","O2"],
+  "units": "uV",
+  "reference": "unknown",
+  "hardware": {
+    "device_type": "wearable_mock",
+    "device_name": "mockband-v0",
+    "firmware_version": "0.1.0",
+    "adc_resolution_bits": 16
+  },
+  "csv": {
+    "path": "recording_060s.csv",
+    "time_column": "t_sec",
+    "signal_columns": ["F3","F4","C3","C4","P3","P4","O1","O2"],
+    "label_column": "label",
+    "has_label": false
+  },
+  "quality_assumptions": {
+    "expected_uV_range": [-200, 200],
+    "max_missing_ratio": 0.02
+  },
+  "notes": "Wearable-like low-density EEG mock."
+}

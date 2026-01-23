@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/eeg8_v0.schema.json",
+  "title": "EEG8 Wearable Recording Metadata v0",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "schema_version",
+    "recording_id",
+    "subject_id",
+    "session_id",
+    "sampling_rate_hz",
+    "channels",
+    "units",
+    "csv",
+    "reference",
+    "hardware"
+  ],
+
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "eeg8_v0"
+    },
+
+    "recording_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_\\-]{3,64}$"
+    },
+
+    "subject_id": {
+      "type": "string",
+      "pattern": "^S\\d{2,4}$"
+    },
+
+    "session_id": {
+      "type": "string",
+      "pattern": "^[0-9]{3}$"
+    },
+
+    "sampling_rate_hz": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1024,
+      "description": "Nominal sampling rate. Wearable-friendly default: 128 Hz."
+    },
+
+    "channels": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "enum": ["F3", "F4", "C3", "C4", "P3", "P4", "O1", "O2"]
+      },
+      "uniqueItems": true,
+      "description": "Fixed 8-channel low-density montage."
+    },
+
+    "units": {
+      "type": "string",
+      "enum": ["uV"],
+      "description": "Signal unit. We standardize on microvolts."
+    },
+
+    "reference": {
+      "type": "string",
+      "enum": ["unknown", "linked_ears", "avg", "cz", "mastoid"],
+      "description": "EEG reference scheme if known."
+    },
+
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device_type", "device_name"],
+      "properties": {
+        "device_type": {
+          "type": "string",
+          "enum": ["wearable_mock", "headband", "ear_eeg", "cap", "other"]
+        },
+        "device_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "firmware_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "adc_resolution_bits": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 32
+        }
+      }
+    },
+
+    "csv": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "time_column", "signal_columns", "has_label"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^.+\\.csv$"
+        },
+        "time_column": {
+          "type": "string",
+          "const": "t_sec"
+        },
+        "signal_columns": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "type": "string",
+            "enum": ["F3", "F4", "C3", "C4", "P3", "P4", "O1", "O2"]
+          },
+          "uniqueItems": true
+        },
+        "label_column": {
+          "type": ["string", "null"],
+          "default": "label"
+        },
+        "has_label": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "task_type": {
+          "type": "string",
+          "enum": ["classification", "regression", "none"]
+        },
+        "label_description": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "window_sec": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 60
+        },
+        "stride_sec": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 60
+        }
+      }
+    },
+
+    "quality_assumptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expected_uV_range": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "number" },
+          "description": "Plausible amplitude range; used for red-flagging outliers."
+        },
+        "max_missing_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  }
+}

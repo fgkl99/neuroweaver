@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Feature Plan v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recording_id", "features", "notes", "confidence"],
+  "properties": {
+    "recording_id": { "type": "string" },
+    "features": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 25,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "family", "channel_scope", "params", "rationale"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "family": {
+            "type": "string",
+            "enum": ["bandpower", "spectral_entropy", "time_domain"]
+          },
+          "channel_scope": {
+            "type": "string",
+            "enum": ["single_channel", "pair_lr", "all_channels"]
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 240
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 8,
+      "items": { "type": "string", "maxLength": 200 }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}
