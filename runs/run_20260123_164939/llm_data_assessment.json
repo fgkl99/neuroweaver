@@ -1,0 +1,22 @@
+{
+  "recording_id": "rec_001",
+  "signal_quality": "medium",
+  "usable_bands": [
+    "alpha"
+  ],
+  "main_risks": [
+    "Short duration",
+    "Low spatial resolution"
+  ],
+  "recommended_feature_families": [
+    "Bandpower",
+    "Spectral entropy",
+    "Time-domain statistics"
+  ],
+  "do_not_do": [
+    "Connectivity features",
+    "Deep learning models",
+    "Raw signal classification"
+  ],
+  "confidence": 0.1
+}

@@ -1,0 +1,170 @@
+{
+  "recording_id": "rec_001",
+  "features": [
+    {
+      "name": "bandpower_alpha_o1",
+      "family": "bandpower",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "O1",
+        "band_hz": [
+          8,
+          12
+        ],
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Posterior alpha bandpower is plausible with O1/O2 montage under wearable constraints."
+    },
+    {
+      "name": "bandpower_alpha_o2",
+      "family": "bandpower",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "O2",
+        "band_hz": [
+          8,
+          12
+        ],
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Posterior alpha bandpower is plausible with O1/O2 montage under wearable constraints."
+    },
+    {
+      "name": "bandpower_alpha_p3",
+      "family": "bandpower",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "P3",
+        "band_hz": [
+          8,
+          12
+        ],
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Posterior alpha bandpower is plausible with O1/O2 montage under wearable constraints."
+    },
+    {
+      "name": "bandpower_alpha_p4",
+      "family": "bandpower",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "P4",
+        "band_hz": [
+          8,
+          12
+        ],
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Posterior alpha bandpower is plausible with O1/O2 montage under wearable constraints."
+    },
+    {
+      "name": "alpha_asymmetry_f3_f4",
+      "family": "bandpower",
+      "channel_scope": "pair_lr",
+      "params": {
+        "channels": [
+          "F3",
+          "F4"
+        ],
+        "band_hz": [
+          8,
+          12
+        ],
+        "formula": "log(F4)-log(F3)",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Frontal alpha asymmetry is a simple low-density feature; robust compared to complex spatial methods."
+    },
+    {
+      "name": "rms_f3",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "F3",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "rms_f4",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "F4",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "rms_c3",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "C3",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "rms_c4",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "C4",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "rms_o1",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "O1",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "rms_o2",
+      "family": "time_domain",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "O2",
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "RMS is a robust amplitude feature; works with low SNR and low channel count."
+    },
+    {
+      "name": "spectral_entropy_o1",
+      "family": "spectral_entropy",
+      "channel_scope": "single_channel",
+      "params": {
+        "channel": "O1",
+        "band_hz": [
+          4,
+          30
+        ],
+        "window_sec": 2.0,
+        "stride_sec": 1.0
+      },
+      "rationale": "Spectral entropy summarizes spectral distribution and is implementable without heavy modeling."
+    }
+  ],
+  "notes": [
+    "Very short recording: plan is illustrative only; confidence is low.",
+    "Connectivity features are intentionally excluded for wearable low-density EEG."
+  ],
+  "confidence": 0.1
+}

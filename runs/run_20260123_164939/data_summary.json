@@ -1,0 +1,22 @@
+{
+  "recording_id": "rec_001",
+  "n_samples": 20,
+  "n_channels": 8,
+  "channels": [
+    "F3",
+    "F4",
+    "C3",
+    "C4",
+    "P3",
+    "P4",
+    "O1",
+    "O2"
+  ],
+  "fs_nominal_hz": 128.0,
+  "fs_estimated_hz": 125.0,
+  "duration_sec": 0.152,
+  "missing_ratio": 0.0,
+  "out_of_range_ratio": 0.0,
+  "quality_grade": "good",
+  "notes": "Wearable-like low-density EEG mock."
+}
