@@ -209,6 +209,34 @@ def main() -> int:
             print(f"  - {e}")
         return 3
 
+
+    # Stage 4: feature determinism gate (CR-controlled, fallback to touched)
+    det_features = cr.get("determinism_features") or sorted(touched)
+    if det_features:
+        det_out = out_dir / "feature_determinism.json"
+        det_cmd = [
+            "python", "tools/feature_determinism.py",
+            "--meta", "data/recording_001.meta.json",
+            "--out", str(det_out),
+            "--features", *list(det_features)
+        ]
+        r = run_cmd(det_cmd)
+        results.append(r.__dict__)
+        if r.returncode != 0:
+            report = {
+                "change_request": cr,
+                "status": "FAIL",
+                "stage": "feature_determinism",
+                "results": results,
+                "artifacts_dir": str(out_dir),
+                "changed_files": sorted(changed),
+                "touched_features": sorted(touched),
+                "determinism_features": list(det_features),
+            }
+            write_report(out_dir, report)
+            print(f"[FAIL] feature_determinism -> {out_dir / 'report.json'}")
+            return 4
+
     report = {
         "change_request": cr,
         "status": "PASS",
@@ -224,3 +252,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

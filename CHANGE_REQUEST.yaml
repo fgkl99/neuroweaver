@@ -1,11 +1,11 @@
-id: CR-0002
-title: Orchestrator encapsulates runs output
-intent: Ensure run.py writes inside orchestrator artifacts directory for clean iteration.
+id: CR-A4
+title: A4 feature determinism gate
+intent: Ensure compute() is deterministic for selected features.
 acceptance:
-  - pytest passes
-  - run.py output is written under artifacts/run_*/nw_runs/
-  - report.json saved under artifacts/run_*/
+  - determinism gate runs and writes feature_determinism.json
 test_commands:
   - [python, -m, pytest, -q]
 verify_commands:
   - [python, run.py, --meta, data/recording_001.meta.json, --out-root, "{OUT_DIR}/nw_runs"]
+determinism_features:
+  - bandpower
