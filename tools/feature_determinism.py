@@ -71,6 +71,14 @@ def check_feature_determinism(
             "error": "compute() must return a pandas.DataFrame",
         }
 
+
+    if out1.shape[1] == 0:
+        return {
+            "feature": feature_name,
+            "ok": False,
+            "error": "compute() produced 0 output columns (empty feature set)."
+        }
+
     h1 = df_sha256(out1)
     h2 = df_sha256(out2)
 
