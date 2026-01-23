@@ -1,0 +1,11 @@
+id: CR-A4
+title: A4 feature determinism gate
+intent: Ensure compute() is deterministic for selected features.
+acceptance:
+  - determinism gate runs and writes feature_determinism.json
+test_commands:
+  - [python, -m, pytest, -q]
+verify_commands:
+  - [python, run.py, --meta, data/recording_001.meta.json, --out-root, "{OUT_DIR}/nw_runs"]
+determinism_features:
+  - bandpower

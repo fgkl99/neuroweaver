@@ -1,3 +1,12 @@
+# Python
 __pycache__/
+*.pyc
+.pytest_cache/
 .env
-*.log
+.venv/
+venv/
+.env.*
+
+# NeuroWeaver outputs
+artifacts/
+runs/

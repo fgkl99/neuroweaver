@@ -1,0 +1,19 @@
+{
+  "id": "bandpower",
+  "version": "0.1.0",
+  "description": "Rolling mean-square power per channel (1s window).",
+  "inputs": {
+    "channels": ["F3","F4","C3","C4","P3","P4","O1","O2"],
+    "sampling_rate_hz_min": 100
+  },
+  "outputs": [
+    {"name": "power_ms_F3", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_F4", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_C3", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_C4", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_P3", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_P4", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_O1", "unit": "uV^2", "expected_range": [0, 1000000]},
+    {"name": "power_ms_O2", "unit": "uV^2", "expected_range": [0, 1000000]}
+  ]
+}
