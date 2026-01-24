@@ -10,3 +10,12 @@ venv/
 # NeuroWeaver outputs
 artifacts/
 runs/
+
+# local sandbox
+sandbox/
+analysis_features.py
+extract_ecg_features.py
+generate_mock_ecg.py
+render_report.py
+run_feature_planner_ecg.py
+
