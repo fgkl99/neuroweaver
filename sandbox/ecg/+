@@ -1,0 +1,126 @@
+﻿from __future__ import annotations
+
+import json
+import hashlib
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import neurokit2 as nk
+
+
+def load_json(p: Path) -> dict:
+    return json.loads(p.read_text(encoding="utf-8-sig"))
+
+
+def write_json(p: Path, obj: dict):
+    p.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+
+
+def sha256_text(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
+def require(cond: bool, msg: str):
+    if not cond:
+        raise ValueError(msg)
+
+
+def main():
+    root = Path(".")
+    runs_dir = root / "runs"
+    run_folders = sorted([p for p in runs_dir.glob("run_*") if p.is_dir()])
+    if not run_folders:
+        raise FileNotFoundError("No runs found. Run run.py first.")
+    run_dir = run_folders[-1]
+    print(f"[INFO] Using run folder: {run_dir}")
+
+    summary = load_json(run_dir / "data_summary.json")
+    plan = load_json(run_dir / "feature_plan.json")
+    meta = load_json(root / "data" / "recording_ecg_001.meta.json")
+
+    csv_path = (root / "data" / meta["csv"]["path"]).resolve()
+    df = pd.read_csv(csv_path)
+
+    fs = float(meta["sampling_rate_hz"])
+    ecg = df["ECG"].to_numpy(dtype=float)
+
+    # Clean + R-peaks
+    signals, info = nk.ecg_process(ecg, sampling_rate=fs)
+    rpeaks = info.get("ECG_R_Peaks", [])
+    require(len(rpeaks) >= 3, "Too few R-peaks detected; cannot compute HRV reliably.")
+
+    # RR intervals (ms)
+    rr = np.diff(np.array(rpeaks)) / fs * 1000.0
+    hr = 60000.0 / rr
+
+    # Windowed HR (10s stride 5s)
+    t = df[meta["csv"]["time_column"]].to_numpy(dtype=float)
+    win_sec = 10.0
+    stride_sec = 5.0
+    win_rows = []
+    start = 0.0
+    end = t[-1]
+
+    while start + win_sec <= end:
+        w_end = start + win_sec
+        mask = (t >= start) & (t < w_end)
+        idx = np.where(mask)[0]
+        if idx.size > 0:
+            # rpeaks within window in sample index
+            # convert window time to sample idx
+            s0 = idx[0]
+            s1 = idx[-1]
+            rp_w = [rp for rp in rpeaks if rp >= s0 and rp <= s1]
+            if len(rp_w) >= 3:
+                rr_w = np.diff(np.array(rp_w)) / fs * 1000.0
+                hr_w = 60000.0 / rr_w
+                hr_bpm = float(np.mean(hr_w))
+            else:
+                hr_bpm = float("nan")
+        else:
+            hr_bpm = float("nan")
+
+        win_rows.append({
+            "recording_id": summary["recording_id"],
+            "t_start": float(start),
+            "t_end": float(w_end),
+            "hr_bpm": hr_bpm
+        })
+        start += stride_sec
+
+    win_df = pd.DataFrame(win_rows)
+    (run_dir / "features_windowed.csv").write_text(win_df.to_csv(index=False), encoding="utf-8")
+    print(f"[OK] Saved: {run_dir / 'features_windowed.csv'}")
+
+    # Aggregates
+    hr_clean = hr[np.isfinite(hr)]
+    agg = {
+        "recording_id": summary["recording_id"],
+        "hr_mean_bpm__mean": float(np.mean(hr_clean)),
+        "hr_mean_bpm__std": float(np.std(hr_clean, ddof=0)),
+        "rmssd_ms__mean": float(np.sqrt(np.mean(np.diff(rr) ** 2))),
+        "sdnn_ms__mean": float(np.std(rr, ddof=0)),
+        "n_beats__mean": float(len(rpeaks)),
+    }
+    agg_df = pd.DataFrame([agg])
+    agg_df.to_csv(run_dir / "features.csv", index=False)
+    print(f"[OK] Saved: {run_dir / 'features.csv'}")
+
+    report = {
+        "recording_id": summary["recording_id"],
+        "mode": "windowed",
+        "window_sec": win_sec,
+        "stride_sec": stride_sec,
+        "n_windows": int(len(win_df)),
+        "n_beats": int(len(rpeaks)),
+        "plan_used_sha256": sha256_text(json.dumps(plan, sort_keys=True)),
+        "notes": ["ECG v0 uses neurokit2 ecg_process for R-peak detection."]
+    }
+    write_json(run_dir / "feature_report.json", report)
+    print(f"[OK] Saved: {run_dir / 'feature_report.json'}")
+
+
+if __name__ == "__main__":
+    main()
+
