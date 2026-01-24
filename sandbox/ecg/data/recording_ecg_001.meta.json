@@ -1,0 +1,28 @@
+﻿{
+  "schema_version": "ecg1_v0",
+  "recording_id": "ecg_rec_001",
+  "subject_id": "S01",
+  "session_id": "001",
+  "sampling_rate_hz": 250,
+  "channels": ["ECG"],
+  "units": "mV",
+  "reference": "unknown",
+  "hardware": {
+    "device_type": "wearable_mock",
+    "device_name": "mockecg-v0",
+    "firmware_version": "0.1.0",
+    "adc_resolution_bits": 16
+  },
+  "csv": {
+    "path": "recording_ecg_060s.csv",
+    "time_column": "t_sec",
+    "signal_columns": ["ECG"],
+    "label_column": "label",
+    "has_label": false
+  },
+  "quality_assumptions": {
+    "expected_mV_range": [-3.0, 3.0],
+    "max_missing_ratio": 0.02
+  },
+  "notes": "Synthetic 1-lead ECG mock for multi-signal governance."
+}
