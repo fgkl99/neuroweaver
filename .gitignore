@@ -10,3 +10,6 @@ venv/
 # NeuroWeaver outputs
 artifacts/
 runs/
+
+# Dossier Lugano: copertine Marvel scaricate da Comic Vine (uso personale)
+dossier-lugano/covers/
